@@ -74,3 +74,7 @@ swift Scripts/GenerateIcon.swift
 ## Project description
 
 Tally Bar is a lightweight time tracker for macOS that lives in the menu bar. Built with SwiftUI, it provides persistent session tracking, daily totals, session history, and CSV export without accounts or external services.
+
+## License
+
+[MIT License](LICENSE) — Copyright (c) 2026 Dawood Aamir.
