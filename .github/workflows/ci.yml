@@ -1,0 +1,20 @@
+name: macOS checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: macos-15
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test tracker
+        env:
+          SWIFT_OPTIMIZATION: ${{ matrix.configuration == 'Release' && '-O' || '-Onone' }}
+        run: bash Scripts/test.sh
+      - name: Build app
+        run: xcodebuild -project 'Tally Bar.xcodeproj' -scheme 'Tally Bar' -configuration '${{ matrix.configuration }}' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build

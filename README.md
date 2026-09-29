@@ -16,7 +16,7 @@ A native macOS menu bar time tracker. Start a named session, pause for a break, 
 
 ## Run
 
-Requires macOS 14 or later and Xcode 16 or later. Development was verified with Xcode 27.
+Requires macOS 13 or later and Xcode 16 or later. Development was verified with Xcode 27.
 
 1. Open `Tally Bar.xcodeproj`.
 2. Select the **Tally Bar** scheme and **My Mac** destination.
@@ -61,9 +61,10 @@ Run the model regression checks:
 
 ```sh
 bash Scripts/test.sh
+SWIFT_OPTIMIZATION=-O bash Scripts/test.sh
 ```
 
-These cover session transitions, persistence across relaunches, excluded pauses, midnight boundaries, CSV escaping, deletion, backward clock changes, corrupt files, and failed writes. They use temporary files and do not touch your session history.
+These cover session transitions, persistence across relaunches, excluded pauses, midnight and daylight-saving boundaries, CSV escaping, deletion, backward clock changes, corrupt files, and failed writes. They use temporary files and do not touch your session history.
 
 Regenerate the icon from the repository root:
 
@@ -71,9 +72,13 @@ Regenerate the icon from the repository root:
 swift Scripts/GenerateIcon.swift
 ```
 
-## Project description
+## Compatibility and verification
 
-Tally Bar is a lightweight time tracker for macOS that lives in the menu bar. Built with SwiftUI, it provides persistent session tracking, daily totals, session history, and CSV export without accounts or external services.
+macOS 13 is the minimum for SwiftUI's native `MenuBarExtra`. The shared Xcode scheme builds without a paid developer account. GitHub Actions builds Debug and Release and runs the model checks with both optimization settings.
+
+The regression suite verifies storage and timing logic. It does not automate menu bar interaction, VoiceOver, or the system save panel; those require manual checks on a Mac. No installation on macOS 13 hardware has been verified.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the manual checklist and [PRIVACY.md](PRIVACY.md) for data handling.
 
 ## License
 
