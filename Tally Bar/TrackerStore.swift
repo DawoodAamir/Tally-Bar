@@ -113,13 +113,19 @@ final class TrackerStore: ObservableObject {
         let rows = data.history.map { session in
             [quote(session.name), quote(formatter.string(from: session.createdAt)),
              quote(session.spans.last.map { formatter.string(from: $0.end) } ?? ""),
-             String(Int(session.duration()))].joined(separator: ",")
+             String(wholeSeconds(session.duration()))].joined(separator: ",")
         }
         return (["Session,Started (UTC),Ended (UTC),Seconds"] + rows).joined(separator: "\r\n") + "\r\n"
     }
 }
 
 func clockText(_ seconds: TimeInterval) -> String {
-    let value = max(0, Int(seconds))
+    let value = wholeSeconds(seconds)
     return String(format: "%02d:%02d:%02d", value / 3600, (value / 60) % 60, value % 60)
+}
+
+// Clamp before conversion: damaged dates or extreme clock changes must not trap.
+private func wholeSeconds(_ seconds: TimeInterval) -> Int {
+    guard seconds.isFinite, seconds > 0 else { return 0 }
+    return seconds >= Double(Int.max) ? Int.max : Int(seconds)
 }
